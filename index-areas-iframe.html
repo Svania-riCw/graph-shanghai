@@ -499,14 +499,22 @@
         
         // 绑定点击事件
         document.getElementById('area-list').addEventListener('click', function(e) {
+            console.log('侧边栏点击事件触发', e.target);
             const li = e.target.closest('li');
-            if (!li) return;
-            
+            if (!li) {
+                console.log('没有找到 li 元素');
+                return;
+            }
+
             const areaId = li.getAttribute('data-area');
+            console.log('点击的区域ID:', areaId);
             const area = areasData.find(a => a.id === areaId);
-            
+
             if (area) {
+                console.log('找到区域数据:', area.name);
                 showAreaInfo(area);
+            } else {
+                console.log('未找到区域数据');
             }
         });
         
@@ -558,11 +566,16 @@
 
         // 监听iframe传来的地图点击事件
         window.addEventListener('message', function(e) {
+            console.log('收到消息:', e.data);
             if (e.data && e.data.type === 'areaClick') {
                 const areaName = e.data.name;
+                console.log('收到地图点击:', areaName);
                 const area = areasData.find(a => a.name === areaName);
                 if (area) {
+                    console.log('找到对应区域:', area.name);
                     showAreaInfo(area);
+                } else {
+                    console.log('未找到对应区域:', areaName);
                 }
             }
         });

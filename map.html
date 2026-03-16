@@ -85,6 +85,7 @@
 
                 // 点击事件 - 通知父页面
                 circle.on('click', (e) => {
+                    console.log('圆形被点击:', area.name);
                     e.stopPropagation();
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
@@ -104,6 +105,7 @@
                 });
 
                 marker.on('click', (e) => {
+                    console.log('标记被点击:', area.name);
                     e.stopPropagation();
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
@@ -113,6 +115,7 @@
 
             // 添加地图点击事件 - 检测点击位置
             map.on('click', (e) => {
+                console.log('地图被点击:', e.lnglat);
                 const clickLngLat = e.lnglat;
                 const clickPos = [clickLngLat.lng, clickLngLat.lat];
                 let clickedArea = null;
@@ -129,7 +132,10 @@
 
                 // 如果点击在某个区域内，发送消息
                 if (clickedArea) {
+                    console.log('点击在区域内:', clickedArea.name);
                     window.parent.postMessage({ type: 'areaClick', name: clickedArea.name }, '*');
+                } else {
+                    console.log('点击不在任何区域内');
                 }
             });
         }
