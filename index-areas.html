@@ -435,6 +435,38 @@
     <script src="https://webapi.amap.com/maps?v=2.0&key=6fc614d0454e138a426ed6735b5989c8&plugin=AMap.Buildings,AMap.Scale,AMap.ToolBar,AMap.Circle,AMap.GeometryUtil"></script>
 
     <!-- 主程序 -->
+    <script type="module" src="./assets/areas-Bb0hxwq-.js"></script>
+    
+    <!-- 调试脚本：确保点击事件绑定 -->
+    <script>
+        window.addEventListener('load', function() {
+            console.log('页面加载完成');
+            
+            // 直接绑定区域列表点击
+            const areaList = document.getElementById('area-list');
+            if (areaList) {
+                console.log('找到area-list');
+                areaList.addEventListener('click', function(e) {
+                    console.log('area-list被点击', e.target);
+                    const li = e.target.closest('li');
+                    if (li) {
+                        const areaId = li.getAttribute('data-area');
+                        console.log('点击了区域:', areaId);
+                        alert('点击了区域: ' + areaId);
+                    }
+                });
+            }
+            
+            // 测试按钮点击
+            const resetBtn = document.getElementById('reset-view');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    console.log('重置按钮被点击');
+                    alert('重置按钮工作正常');
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
