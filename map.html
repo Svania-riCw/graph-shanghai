@@ -142,6 +142,11 @@
                     console.log('点击不在任何区域内');
                 }
             });
+
+            // 确保圆形可点击 - 使用覆盖物点击事件
+            map.on('overlayclick', (e) => {
+                console.log('覆盖物被点击:', e);
+            });
         }
 
         // 计算两点间距离（米）
@@ -196,6 +201,14 @@
                 console.log('缩小');
                 const currentZoom = map.getZoom();
                 map.setZoom(currentZoom - 1);
+            } else if (e.data === 'pitchUp') {
+                console.log('俯视 - 增加pitch');
+                const currentPitch = map.getPitch();
+                map.setPitch(Math.min(currentPitch + 10, 80));
+            } else if (e.data === 'pitchDown') {
+                console.log('平视 - 减小pitch');
+                const currentPitch = map.getPitch();
+                map.setPitch(Math.max(currentPitch - 10, 0));
             }
         });
         

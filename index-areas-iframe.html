@@ -349,6 +349,10 @@
             <button id="zoom-in">+</button>
             <button id="zoom-out">-</button>
         </div>
+        <div class="pitch-controls">
+            <button id="pitch-up">↕️ 俯视</button>
+            <button id="pitch-down">↕️ 平视</button>
+        </div>
     </div>
 
     <!-- 区域导航侧边栏 -->
@@ -607,7 +611,24 @@
                 frame.contentWindow.postMessage('zoomOut', '*');
             }
         });
-        
+
+        // 纵向变换（俯仰角）控制
+        document.getElementById('pitch-up').addEventListener('click', function() {
+            const frame = document.getElementById('map-frame');
+            if (frame && frame.contentWindow) {
+                console.log('发送俯视消息');
+                frame.contentWindow.postMessage('pitchUp', '*');
+            }
+        });
+
+        document.getElementById('pitch-down').addEventListener('click', function() {
+            const frame = document.getElementById('map-frame');
+            if (frame && frame.contentWindow) {
+                console.log('发送平视消息');
+                frame.contentWindow.postMessage('pitchDown', '*');
+            }
+        });
+
         // 隐藏加载画面
         setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
