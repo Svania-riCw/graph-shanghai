@@ -515,23 +515,15 @@
             if (area) {
                 console.log('找到区域数据:', area.name);
                 
-                // 通知iframe切换对应区域显示
+                // 通知iframe显示对应区域（单选模式）
                 const frame = document.getElementById('map-frame');
                 if (frame && frame.contentWindow) {
-                    console.log('发送切换区域消息:', area.name);
-                    frame.contentWindow.postMessage({ type: 'toggleArea', name: area.name }, '*');
+                    console.log('发送显示区域消息:', area.name);
+                    frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
                 }
                 
-                // 切换信息面板显示
-                if (visibleAreas[areaId]) {
-                    // 如果已显示，则隐藏
-                    document.getElementById('info-panel').classList.remove('active');
-                    visibleAreas[areaId] = false;
-                } else {
-                    // 如果未显示，则显示
-                    showAreaInfo(area);
-                    visibleAreas[areaId] = true;
-                }
+                // 显示信息面板
+                showAreaInfo(area);
             } else {
                 console.log('未找到区域数据');
             }
@@ -544,23 +536,15 @@
                 const areaId = this.getAttribute('data-area');
                 const area = areasData.find(a => a.id === areaId);
                 if (area) {
-                    // 通知iframe切换对应区域显示
+                    // 通知iframe显示对应区域（单选模式）
                     const frame = document.getElementById('map-frame');
                     if (frame && frame.contentWindow) {
-                        console.log('发送切换区域消息:', area.name);
-                        frame.contentWindow.postMessage({ type: 'toggleArea', name: area.name }, '*');
+                        console.log('发送显示区域消息:', area.name);
+                        frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
                     }
                     
-                    // 切换信息面板显示
-                    if (visibleAreas[areaId]) {
-                        // 如果已显示，则隐藏
-                        document.getElementById('info-panel').classList.remove('active');
-                        visibleAreas[areaId] = false;
-                    } else {
-                        // 如果未显示，则显示
-                        showAreaInfo(area);
-                        visibleAreas[areaId] = true;
-                    }
+                    // 显示信息面板
+                    showAreaInfo(area);
                 }
             };
         });
