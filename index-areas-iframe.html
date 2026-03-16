@@ -497,6 +497,9 @@
             }
         ];
         
+        // 跟踪当前显示的区域
+        let currentVisibleArea = null;
+
         // 绑定点击事件
         const areaList = document.getElementById('area-list');
         console.log('area-list 元素:', areaList);
@@ -515,13 +518,22 @@
 
             if (area) {
                 console.log('找到区域数据:', area.name);
-                showAreaInfo(area);
                 
-                // 通知iframe显示对应区域
+                // 通知iframe显示/切换对应区域
                 const frame = document.getElementById('map-frame');
                 if (frame && frame.contentWindow) {
-                    console.log('发送显示区域消息:', area.name);
+                    console.log('发送显示/切换区域消息:', area.name);
                     frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
+                }
+                
+                // 如果点击的是当前已显示的区域，则关闭信息面板
+                if (currentVisibleArea === areaId) {
+                    document.getElementById('info-panel').classList.remove('active');
+                    currentVisibleArea = null;
+                } else {
+                    // 显示新区域的信息
+                    showAreaInfo(area);
+                    currentVisibleArea = areaId;
                 }
             } else {
                 console.log('未找到区域数据');
@@ -535,13 +547,21 @@
                 const areaId = this.getAttribute('data-area');
                 const area = areasData.find(a => a.id === areaId);
                 if (area) {
-                    showAreaInfo(area);
-                    
-                    // 通知iframe显示对应区域
+                    // 通知iframe显示/切换对应区域
                     const frame = document.getElementById('map-frame');
                     if (frame && frame.contentWindow) {
-                        console.log('发送显示区域消息:', area.name);
+                        console.log('发送显示/切换区域消息:', area.name);
                         frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
+                    }
+                    
+                    // 如果点击的是当前已显示的区域，则关闭信息面板
+                    if (currentVisibleArea === areaId) {
+                        document.getElementById('info-panel').classList.remove('active');
+                        currentVisibleArea = null;
+                    } else {
+                        // 显示新区域的信息
+                        showAreaInfo(area);
+                        currentVisibleArea = areaId;
                     }
                 }
             };

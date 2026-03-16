@@ -218,26 +218,27 @@
                 const currentPitch = map.getPitch();
                 map.setPitch(Math.max(currentPitch - 10, 0));
             } else if (e.data && e.data.type === 'showArea') {
-                // 显示指定区域
+                // 显示/切换指定区域
                 const areaName = e.data.name;
-                console.log('显示区域:', areaName);
+                console.log('显示/切换区域:', areaName);
                 if (areaObjects[areaName]) {
-                    // 先移除所有区域
-                    Object.values(areaObjects).forEach(obj => {
-                        if (obj.added) {
-                            map.remove(obj.circle);
-                            map.remove(obj.marker);
-                            obj.added = false;
-                        }
-                    });
-                    // 添加并显示指定区域
                     const obj = areaObjects[areaName];
-                    map.add(obj.circle);
-                    map.add(obj.marker);
-                    obj.added = true;
-                    // 移动到该区域
-                    const center = obj.circle.getCenter();
-                    map.setZoomAndCenter(15, center);
+                    if (obj.added) {
+                        // 如果已经显示，则移除（第二次点击）
+                        map.remove(obj.circle);
+                        map.remove(obj.marker);
+                        obj.added = false;
+                        console.log('移除区域:', areaName);
+                    } else {
+                        // 如果未显示，则添加
+                        map.add(obj.circle);
+                        map.add(obj.marker);
+                        obj.added = true;
+                        console.log('添加区域:', areaName);
+                        // 移动到该区域
+                        const center = obj.circle.getCenter();
+                        map.setZoomAndCenter(15, center);
+                    }
                 }
             } else if (e.data === 'hideAllAreas') {
                 // 隐藏所有区域
