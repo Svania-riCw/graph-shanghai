@@ -97,6 +97,7 @@
                 });
 
                 map.add(circle);
+                circle.hide(); // 默认隐藏
                 areaCircles.push(circle);
 
                 // 保存区域对象
@@ -121,6 +122,7 @@
                 });
 
                 map.add(marker);
+                marker.hide(); // 默认隐藏
                 
                 // 保存标记对象
                 areaObjects[area.name].marker = marker;
