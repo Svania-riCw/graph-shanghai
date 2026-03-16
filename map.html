@@ -73,10 +73,11 @@
                 { name: '陆家嘴金融区', center: [121.5018, 31.2304], radius: 1500, color: '#00d4ff' }
             ];
 
-            areas.forEach(area => {
+            areas.forEach((area, index) => {
                 // 保存区域数据
                 areasData.push(area);
 
+                // 创建圆形
                 const circle = new AMap.Circle({
                     center: area.center,
                     radius: area.radius,
@@ -85,46 +86,46 @@
                     strokeColor: area.color,
                     strokeWeight: 3,
                     strokeOpacity: 0.9,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    extData: { name: area.name }
                 });
 
-                // 点击事件 - 通知父页面
+                // 点击事件
                 circle.on('click', (e) => {
                     console.log('圆形被点击:', area.name);
-                    e.stopPropagation();
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
 
-                // 添加到地图并显示
+                // 添加到地图
                 map.add(circle);
                 areaCircles.push(circle);
 
                 // 保存区域对象
                 areaObjects[area.name] = { circle, marker: null };
 
-                // 中心标记
+                // 创建标记
                 const marker = new AMap.Marker({
                     position: area.center,
                     title: area.name,
                     cursor: 'pointer',
                     label: {
-                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">${area.name}</div>`,
+                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">${area.name}</div>`,
                         offset: new AMap.Pixel(0, -35)
                     }
                 });
 
-                marker.on('click', (e) => {
+                marker.on('click', () => {
                     console.log('标记被点击:', area.name);
-                    e.stopPropagation();
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
 
-                // 添加到地图并显示
                 map.add(marker);
-
-                // 保存标记对象
                 areaObjects[area.name].marker = marker;
+                
+                console.log('创建区域:', area.name);
             });
+            
+            console.log('所有区域创建完成，共', areas.length, '个');
 
             // 添加地图点击事件 - 检测点击位置
             map.on('click', (e) => {
