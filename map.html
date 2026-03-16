@@ -48,6 +48,9 @@
             console.log('地图初始化完成');
         }
         
+        // 存储区域数据用于点击检测
+        const areasData = [];
+
         // 添加区域圆形
         function addAreaCircles() {
             const areas = [
@@ -64,41 +67,69 @@
                 { name: '静安寺商圈', center: [121.4460, 31.2230], radius: 800, color: '#ee5a6f' },
                 { name: '陆家嘴金融区', center: [121.5018, 31.2304], radius: 1500, color: '#00d4ff' }
             ];
-            
+
             areas.forEach(area => {
+                // 保存区域数据
+                areasData.push(area);
+
                 const circle = new AMap.Circle({
                     center: area.center,
                     radius: area.radius,
                     fillColor: area.color,
-                    fillOpacity: 0.2,
+                    fillOpacity: 0.3,
                     strokeColor: area.color,
-                    strokeWeight: 2,
-                    strokeOpacity: 0.8
+                    strokeWeight: 3,
+                    strokeOpacity: 0.9,
+                    cursor: 'pointer'
                 });
-                
+
                 // 点击事件 - 通知父页面
-                circle.on('click', () => {
+                circle.on('click', (e) => {
+                    e.stopPropagation();
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
-                
+
                 map.add(circle);
                 areaCircles.push(circle);
-                
+
                 // 中心标记
                 const marker = new AMap.Marker({
                     position: area.center,
                     title: area.name,
+                    cursor: 'pointer',
                     label: {
-                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">${area.name}</div>`,
+                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">${area.name}</div>`,
                         offset: new AMap.Pixel(0, -35)
                     }
                 });
-                
-                marker.on('click', () => {
+
+                marker.on('click', (e) => {
+                    e.stopPropagation();
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
-                
+
                 map.add(marker);
+            });
+
+            // 添加地图点击事件 - 检测点击位置
+            map.on('click', (e) => {
+                const clickLngLat = e.lnglat;
+                let clickedArea = null;
+                let minDistance = Infinity;
+
+                // 检查点击位置是否在某个区域内
+                areasData.forEach(area => {
+                    const distance = AMap.GeometryUtil.distance(clickLngLat, area.center);
+                    if (distance <= area.radius && distance < minDistance) {
+                        minDistance = distance;
+                        clickedArea = area;
+                    }
+                });
+
+                // 如果点击在某个区域内，发送消息
+                if (clickedArea) {
+                    window.parent.postMessage({ type: 'areaClick', name: clickedArea.name }, '*');
+                }
             });
         }
         
