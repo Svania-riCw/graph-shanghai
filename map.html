@@ -273,10 +273,22 @@
                         console.log('隐藏区域:', areaName);
                     } else {
                         // 如果未显示，则显示
-                        map.add(obj.circle);
-                        map.add(obj.marker);
+                        console.log('准备添加圆圈:', areaName, obj.circle);
+                        try {
+                            map.add(obj.circle);
+                            console.log('圆圈添加成功');
+                        } catch (e) {
+                            console.error('添加圆圈失败:', e);
+                        }
+                        console.log('准备添加标记:', areaName, obj.marker);
+                        try {
+                            map.add(obj.marker);
+                            console.log('标记添加成功');
+                        } catch (e) {
+                            console.error('添加标记失败:', e);
+                        }
                         obj.visible = true;
-                        console.log('显示区域:', areaName);
+                        console.log('显示区域完成:', areaName);
                         // 移动到该区域
                         const center = obj.circle.getCenter();
                         map.setZoomAndCenter(15, center);
