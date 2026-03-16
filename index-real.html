@@ -111,12 +111,12 @@
         </div>
 
         <!-- 街道导航侧边栏 -->
-        <div class="sidebar">
+        <div class="sidebar" style="pointer-events: auto !important;">
             <h3>🏙️ 主要街道</h3>
-            <ul id="street-list">
-                <li data-lng="121.4737" data-lat="31.2348">南京路步行街</li>
-                <li data-lng="121.4636" data-lat="31.2183">淮海路</li>
-                <li data-lng="121.4906" data-lat="31.2397">外滩</li>
+            <ul id="street-list" style="pointer-events: auto !important;">
+                <li data-lng="121.4737" data-lat="31.2348" onclick="alert('点击了南京路')">南京路步行街</li>
+                <li data-lng="121.4636" data-lat="31.2183" onclick="alert('点击了淮海路')">淮海路</li>
+                <li data-lng="121.4906" data-lat="31.2397" onclick="alert('点击了外滩')">外滩</li>
                 <li data-lng="121.4922" data-lat="31.2272">豫园老街</li>
                 <li data-lng="121.4734" data-lat="31.2214">新天地</li>
                 <li data-lng="121.4668" data-lat="31.2103">田子坊</li>
@@ -124,7 +124,7 @@
                 <li data-lng="121.4689" data-lat="31.2156">思南路</li>
             </ul>
             <h3>🏛️ 地标建筑</h3>
-            <ul id="landmark-list">
+            <ul id="landmark-list" style="pointer-events: auto !important;">
                 <li data-lng="121.4956" data-lat="31.2397">东方明珠</li>
                 <li data-lng="121.5018" data-lat="31.2304">上海中心大厦</li>
                 <li data-lng="121.4906" data-lat="31.2397">海关大楼</li>
