@@ -569,8 +569,12 @@
             document.getElementById('info-panel').classList.remove('active');
             // 通知iframe重置地图
             const frame = document.getElementById('map-frame');
-            console.log('发送reset消息到iframe');
-            frame.contentWindow.postMessage('reset', '*');
+            if (frame && frame.contentWindow) {
+                console.log('发送reset消息到iframe');
+                frame.contentWindow.postMessage('reset', '*');
+            } else {
+                console.error('iframe未加载完成');
+            }
         });
         
         // 夜景模式
@@ -581,8 +585,10 @@
             this.classList.toggle('active');
             // 通知iframe切换模式
             const frame = document.getElementById('map-frame');
-            console.log('发送夜景模式消息:', isNightMode ? 'night' : 'day');
-            frame.contentWindow.postMessage(isNightMode ? 'night' : 'day', '*');
+            if (frame && frame.contentWindow) {
+                console.log('发送夜景模式消息:', isNightMode ? 'night' : 'day');
+                frame.contentWindow.postMessage(isNightMode ? 'night' : 'day', '*');
+            }
         });
 
         // 自动旋转
@@ -590,22 +596,28 @@
         document.getElementById('toggle-rotate').addEventListener('click', function() {
             isAutoRotating = !isAutoRotating;
             this.textContent = isAutoRotating ? '⏹️ 停止旋转' : '🔄 自动旋转';
-            console.log('发送自动旋转消息:', isAutoRotating ? 'startRotate' : 'stopRotate');
             const frame = document.getElementById('map-frame');
-            frame.contentWindow.postMessage(isAutoRotating ? 'startRotate' : 'stopRotate', '*');
+            if (frame && frame.contentWindow) {
+                console.log('发送自动旋转消息:', isAutoRotating ? 'startRotate' : 'stopRotate');
+                frame.contentWindow.postMessage(isAutoRotating ? 'startRotate' : 'stopRotate', '*');
+            }
         });
 
         // 缩放控制
         document.getElementById('zoom-in').addEventListener('click', function() {
-            console.log('发送放大消息');
             const frame = document.getElementById('map-frame');
-            frame.contentWindow.postMessage('zoomIn', '*');
+            if (frame && frame.contentWindow) {
+                console.log('发送放大消息');
+                frame.contentWindow.postMessage('zoomIn', '*');
+            }
         });
 
         document.getElementById('zoom-out').addEventListener('click', function() {
-            console.log('发送缩小消息');
             const frame = document.getElementById('map-frame');
-            frame.contentWindow.postMessage('zoomOut', '*');
+            if (frame && frame.contentWindow) {
+                console.log('发送缩小消息');
+                frame.contentWindow.postMessage('zoomOut', '*');
+            }
         });
         
         // 隐藏加载画面
