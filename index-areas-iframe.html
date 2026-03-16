@@ -493,8 +493,8 @@
             }
         ];
         
-        // 跟踪当前显示的区域
-        let currentVisibleArea = null;
+        // 跟踪每个区域的显示状态
+        const visibleAreas = {};
 
         // 绑定点击事件
         const areaList = document.getElementById('area-list');
@@ -515,21 +515,22 @@
             if (area) {
                 console.log('找到区域数据:', area.name);
                 
-                // 通知iframe显示/切换对应区域
+                // 通知iframe切换对应区域显示
                 const frame = document.getElementById('map-frame');
                 if (frame && frame.contentWindow) {
-                    console.log('发送显示/切换区域消息:', area.name);
-                    frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
+                    console.log('发送切换区域消息:', area.name);
+                    frame.contentWindow.postMessage({ type: 'toggleArea', name: area.name }, '*');
                 }
                 
-                // 如果点击的是当前已显示的区域，则关闭信息面板
-                if (currentVisibleArea === areaId) {
+                // 切换信息面板显示
+                if (visibleAreas[areaId]) {
+                    // 如果已显示，则隐藏
                     document.getElementById('info-panel').classList.remove('active');
-                    currentVisibleArea = null;
+                    visibleAreas[areaId] = false;
                 } else {
-                    // 显示新区域的信息
+                    // 如果未显示，则显示
                     showAreaInfo(area);
-                    currentVisibleArea = areaId;
+                    visibleAreas[areaId] = true;
                 }
             } else {
                 console.log('未找到区域数据');
@@ -543,21 +544,22 @@
                 const areaId = this.getAttribute('data-area');
                 const area = areasData.find(a => a.id === areaId);
                 if (area) {
-                    // 通知iframe显示/切换对应区域
+                    // 通知iframe切换对应区域显示
                     const frame = document.getElementById('map-frame');
                     if (frame && frame.contentWindow) {
-                        console.log('发送显示/切换区域消息:', area.name);
-                        frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
+                        console.log('发送切换区域消息:', area.name);
+                        frame.contentWindow.postMessage({ type: 'toggleArea', name: area.name }, '*');
                     }
                     
-                    // 如果点击的是当前已显示的区域，则关闭信息面板
-                    if (currentVisibleArea === areaId) {
+                    // 切换信息面板显示
+                    if (visibleAreas[areaId]) {
+                        // 如果已显示，则隐藏
                         document.getElementById('info-panel').classList.remove('active');
-                        currentVisibleArea = null;
+                        visibleAreas[areaId] = false;
                     } else {
-                        // 显示新区域的信息
+                        // 如果未显示，则显示
                         showAreaInfo(area);
-                        currentVisibleArea = areaId;
+                        visibleAreas[areaId] = true;
                     }
                 }
             };
