@@ -65,6 +65,40 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             z-index: 9999;
             pointer-events: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-260px);
+        }
+
+        /* 侧边栏收起按钮 */
+        .toggle-sidebar-btn {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-size: 14px;
+            color: #1a1a2e;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 10000;
+        }
+
+        .toggle-sidebar-btn:hover {
+            background: #00d4ff;
+            color: white;
+        }
+
+        .sidebar.collapsed .toggle-sidebar-btn {
+            right: -30px;
+            border-radius: 0 8px 8px 0;
         }
         
         .sidebar h3 {
@@ -352,7 +386,8 @@
     </div>
 
     <!-- 区域导航侧边栏 -->
-    <div class="sidebar ui-element">
+    <div class="sidebar ui-element" id="sidebar">
+        <button id="toggle-sidebar" class="toggle-sidebar-btn" title="收起侧边栏">◀</button>
         <h3>🎯 特色区域 (12个)</h3>
         <ul id="area-list">
             <li data-area="nanjing-road-area"><span class="area-tag" style="background: #ff6b6b;"></span>南京路商圈</li>
@@ -649,6 +684,14 @@
                     console.log('未找到对应区域:', areaName);
                 }
             }
+        });
+
+        // 侧边栏收起/展开功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+            this.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
+            this.title = sidebar.classList.contains('collapsed') ? '展开侧边栏' : '收起侧边栏';
         });
 
         console.log('iframe版区域地图加载完成');
