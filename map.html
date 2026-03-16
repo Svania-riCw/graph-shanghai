@@ -67,19 +67,6 @@
             }
 
             console.log('地图初始化完成');
-            
-            // 添加测试圆圈 - 直接显示在地图中心
-            const testCircle = new AMap.Circle({
-                center: [121.4737, 31.2304],
-                radius: 1000,
-                fillColor: '#ff0000',
-                fillOpacity: 0.5,
-                strokeColor: '#ffffff',
-                strokeWeight: 5,
-                strokeOpacity: 1
-            });
-            map.add(testCircle);
-            console.log('测试圆圈已添加');
         }
         
         // 存储区域数据用于点击检测
@@ -274,20 +261,18 @@
                         console.log('隐藏区域:', areaName);
                     } else {
                         // 如果未显示，则显示
-                        console.log('准备添加圆圈:', areaName, obj.circle);
-                        try {
-                            map.add(obj.circle);
-                            console.log('圆圈添加成功');
-                        } catch (e) {
-                            console.error('添加圆圈失败:', e);
+                        console.log('准备添加圆圈:', areaName);
+                        map.add(obj.circle);
+                        map.add(obj.marker);
+                        
+                        // 将圆圈和标记移到最上层
+                        if (obj.circle.bringToFront) {
+                            obj.circle.bringToFront();
                         }
-                        console.log('准备添加标记:', areaName, obj.marker);
-                        try {
-                            map.add(obj.marker);
-                            console.log('标记添加成功');
-                        } catch (e) {
-                            console.error('添加标记失败:', e);
+                        if (obj.marker.bringToFront) {
+                            obj.marker.bringToFront();
                         }
+                        
                         obj.visible = true;
                         console.log('显示区域完成:', areaName);
                         // 移动到该区域
