@@ -96,19 +96,17 @@
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
 
-                map.add(circle);
-                circle.setVisible(false); // 默认隐藏
+                // 不添加到地图，默认隐藏
                 areaCircles.push(circle);
 
                 // 保存区域对象
-                areaObjects[area.name] = { circle, marker: null };
+                areaObjects[area.name] = { circle, marker: null, added: false };
 
                 // 中心标记
                 const marker = new AMap.Marker({
                     position: area.center,
                     title: area.name,
                     cursor: 'pointer',
-                    visible: false,
                     label: {
                         content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">${area.name}</div>`,
                         offset: new AMap.Pixel(0, -35)
@@ -121,8 +119,7 @@
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
 
-                map.add(marker);
-                marker.setVisible(false); // 默认隐藏
+                // 不添加到地图，默认隐藏
                 
                 // 保存标记对象
                 areaObjects[area.name].marker = marker;
@@ -225,24 +222,32 @@
                 const areaName = e.data.name;
                 console.log('显示区域:', areaName);
                 if (areaObjects[areaName]) {
-                    // 先隐藏所有区域
+                    // 先移除所有区域
                     Object.values(areaObjects).forEach(obj => {
-                        obj.circle.setVisible(false);
-                        obj.marker.setVisible(false);
+                        if (obj.added) {
+                            map.remove(obj.circle);
+                            map.remove(obj.marker);
+                            obj.added = false;
+                        }
                     });
-                    // 显示指定区域
-                    areaObjects[areaName].circle.setVisible(true);
-                    areaObjects[areaName].marker.setVisible(true);
+                    // 添加并显示指定区域
+                    const obj = areaObjects[areaName];
+                    map.add(obj.circle);
+                    map.add(obj.marker);
+                    obj.added = true;
                     // 移动到该区域
-                    const center = areaObjects[areaName].circle.getCenter();
+                    const center = obj.circle.getCenter();
                     map.setZoomAndCenter(15, center);
                 }
             } else if (e.data === 'hideAllAreas') {
                 // 隐藏所有区域
                 console.log('隐藏所有区域');
                 Object.values(areaObjects).forEach(obj => {
-                    obj.circle.setVisible(false);
-                    obj.marker.setVisible(false);
+                    if (obj.added) {
+                        map.remove(obj.circle);
+                        map.remove(obj.marker);
+                        obj.added = false;
+                    }
                 });
             }
         });
