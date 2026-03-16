@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; }
+        #amap-container { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="amap-container"></div>
+    
+    <script src="https://webapi.amap.com/maps?v=2.0&key=6fc614d0454e138a426ed6735b5989c8&plugin=AMap.Buildings,AMap.Scale,AMap.ToolBar,AMap.Circle"></script>
+    
+    <script>
+        let map;
+        let areaCircles = [];
+        
+        // 初始化地图
+        function init() {
+            map = new AMap.Map('amap-container', {
+                viewMode: '3D',
+                pitch: 60,
+                zoom: 14,
+                center: [121.4737, 31.2304],
+                mapStyle: 'amap://styles/darkblue',
+                showBuildingBlock: true
+            });
+            
+            // 添加3D建筑
+            const buildings = new AMap.Buildings({
+                zooms: [14, 20],
+                zIndex: 10,
+                heightFactor: 1.5
+            });
+            map.add(buildings);
+            
+            // 添加区域圆形
+            addAreaCircles();
+            
+            // 添加控件
+            map.addControl(new AMap.Scale());
+            map.addControl(new AMap.ToolBar({ position: 'RB' }));
+            
+            console.log('地图初始化完成');
+        }
+        
+        // 添加区域圆形
+        function addAreaCircles() {
+            const areas = [
+                { name: '南京路商圈', center: [121.4737, 31.2348], radius: 800, color: '#ff6b6b' },
+                { name: '淮海路商圈', center: [121.4636, 31.2183], radius: 1000, color: '#4ecdc4' },
+                { name: '外滩历史文化区', center: [121.4906, 31.2397], radius: 1200, color: '#ffd93d' },
+                { name: '豫园老城厢', center: [121.4922, 31.2272], radius: 600, color: '#95e1d3' },
+                { name: '新天地石库门区', center: [121.4734, 31.2214], radius: 500, color: '#f38181' },
+                { name: '田子坊创意区', center: [121.4668, 31.2103], radius: 400, color: '#aa96da' },
+                { name: '武康路名人故居区', center: [121.4546, 31.2045], radius: 700, color: '#fcbad3' },
+                { name: '思南路梧桐区', center: [121.4689, 31.2156], radius: 600, color: '#a8d8ea' },
+                { name: '陕西南路商圈', center: [121.4580, 31.2150], radius: 500, color: '#ff9f43' },
+                { name: '重庆北路商务区', center: [121.4700, 31.2350], radius: 450, color: '#10ac84' },
+                { name: '静安寺商圈', center: [121.4460, 31.2230], radius: 800, color: '#ee5a6f' },
+                { name: '陆家嘴金融区', center: [121.5018, 31.2304], radius: 1500, color: '#00d4ff' }
+            ];
+            
+            areas.forEach(area => {
+                const circle = new AMap.Circle({
+                    center: area.center,
+                    radius: area.radius,
+                    fillColor: area.color,
+                    fillOpacity: 0.2,
+                    strokeColor: area.color,
+                    strokeWeight: 2,
+                    strokeOpacity: 0.8
+                });
+                
+                // 点击事件 - 通知父页面
+                circle.on('click', () => {
+                    window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
+                });
+                
+                map.add(circle);
+                areaCircles.push(circle);
+                
+                // 中心标记
+                const marker = new AMap.Marker({
+                    position: area.center,
+                    title: area.name,
+                    label: {
+                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">${area.name}</div>`,
+                        offset: new AMap.Pixel(0, -35)
+                    }
+                });
+                
+                marker.on('click', () => {
+                    window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
+                });
+                
+                map.add(marker);
+            });
+        }
+        
+        // 监听父页面消息
+        window.addEventListener('message', (e) => {
+            if (e.data === 'reset') {
+                map.setZoomAndCenter(14, [121.4737, 31.2304]);
+            } else if (e.data === 'night') {
+                map.setMapStyle('amap://styles/darkblue');
+            } else if (e.data === 'day') {
+                map.setMapStyle('amap://styles/normal');
+            }
+        });
+        
+        // 初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
