@@ -157,13 +157,39 @@
         }
         
         // 监听父页面消息
+        let rotationInterval = null;
         window.addEventListener('message', (e) => {
+            console.log('地图收到消息:', e.data);
             if (e.data === 'reset') {
+                console.log('执行重置视角');
                 map.setZoomAndCenter(14, [121.4737, 31.2304]);
+                map.setPitch(60);
             } else if (e.data === 'night') {
+                console.log('切换到夜景模式');
                 map.setMapStyle('amap://styles/darkblue');
             } else if (e.data === 'day') {
+                console.log('切换到日间模式');
                 map.setMapStyle('amap://styles/normal');
+            } else if (e.data === 'startRotate') {
+                console.log('开始自动旋转');
+                if (rotationInterval) clearInterval(rotationInterval);
+                let rotation = map.getRotation() || 0;
+                rotationInterval = setInterval(() => {
+                    rotation += 0.5;
+                    map.setRotation(rotation);
+                }, 50);
+            } else if (e.data === 'stopRotate') {
+                console.log('停止自动旋转');
+                if (rotationInterval) {
+                    clearInterval(rotationInterval);
+                    rotationInterval = null;
+                }
+            } else if (e.data === 'zoomIn') {
+                console.log('放大');
+                map.zoomIn();
+            } else if (e.data === 'zoomOut') {
+                console.log('缩小');
+                map.zoomOut();
             }
         });
         
