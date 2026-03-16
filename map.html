@@ -101,18 +101,19 @@
                 // 保存区域数据
                 areasData.push(area);
 
-                // 创建圆形 - 增强可见性，设置高zIndex
+                // 创建圆形 - 增强可见性，设置高zIndex，增大半径
                 const circle = new AMap.Circle({
                     center: area.center,
-                    radius: area.radius,
+                    radius: area.radius * 1.5,
                     fillColor: area.color,
-                    fillOpacity: 0.6,
-                    strokeColor: area.color,
-                    strokeWeight: 5,
+                    fillOpacity: 0.7,
+                    strokeColor: '#ffffff',
+                    strokeWeight: 6,
                     strokeOpacity: 1.0,
+                    strokeStyle: 'solid',
                     cursor: 'pointer',
                     extData: { name: area.name },
-                    zIndex: 100
+                    zIndex: 1000
                 });
 
                 // 点击事件
@@ -163,7 +164,7 @@
                 // 检查点击位置是否在某个区域内（使用简单的距离计算）
                 areasData.forEach(area => {
                     const distance = calculateDistance(clickPos, area.center);
-                    if (distance <= area.radius && distance < minDistance) {
+                    if (distance <= area.radius * 1.5 && distance < minDistance) {
                         minDistance = distance;
                         clickedArea = area;
                     }
