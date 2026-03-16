@@ -627,20 +627,22 @@
             }
         });
 
-        // 纵向变换（俯仰角）控制 - 注意：按钮文本已交换，pitchUp是减小角度（平视），pitchDown是增加角度（俯视）
+        // 纵向变换（俯仰角）控制
+        // 平视按钮：减小pitch（更平）
         document.getElementById('pitch-up').addEventListener('click', function() {
             const frame = document.getElementById('map-frame');
             if (frame && frame.contentWindow) {
                 console.log('发送平视消息（减小pitch）');
-                frame.contentWindow.postMessage('pitchUp', '*');
+                frame.contentWindow.postMessage('pitchDown', '*'); // pitchDown = 减小pitch = 平视
             }
         });
 
+        // 俯视按钮：增加pitch（更俯视）
         document.getElementById('pitch-down').addEventListener('click', function() {
             const frame = document.getElementById('map-frame');
             if (frame && frame.contentWindow) {
                 console.log('发送俯视消息（增加pitch）');
-                frame.contentWindow.postMessage('pitchDown', '*');
+                frame.contentWindow.postMessage('pitchUp', '*'); // pitchUp = 增加pitch = 俯视
             }
         });
 
