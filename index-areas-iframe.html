@@ -397,9 +397,7 @@
     </div>
     
     <script>
-        // 测试脚本是否运行
         console.log('=== 脚本开始加载 ===');
-        alert('页面脚本已加载！如果看到这个弹窗，说明JS正常运行。');
         
         // 区域数据
         const areasData = [
@@ -502,7 +500,10 @@
         ];
         
         // 绑定点击事件
-        document.getElementById('area-list').addEventListener('click', function(e) {
+        const areaList = document.getElementById('area-list');
+        console.log('area-list 元素:', areaList);
+        
+        areaList.addEventListener('click', function(e) {
             console.log('侧边栏点击事件触发', e.target);
             const li = e.target.closest('li');
             if (!li) {
@@ -520,6 +521,18 @@
             } else {
                 console.log('未找到区域数据');
             }
+        });
+        
+        // 直接给每个li绑定点击事件（备用方案）
+        document.querySelectorAll('#area-list li').forEach(li => {
+            li.onclick = function() {
+                console.log('直接点击 li:', this.getAttribute('data-area'));
+                const areaId = this.getAttribute('data-area');
+                const area = areasData.find(a => a.id === areaId);
+                if (area) {
+                    showAreaInfo(area);
+                }
+            };
         });
         
         function showAreaInfo(area) {
