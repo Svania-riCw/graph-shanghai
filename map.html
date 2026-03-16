@@ -13,7 +13,7 @@
 <body>
     <div id="amap-container"></div>
     
-    <script src="https://webapi.amap.com/maps?v=2.0&key=6fc614d0454e138a426ed6735b5989c8&plugin=AMap.Buildings,AMap.Scale,AMap.ToolBar,AMap.Circle"></script>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=6fc614d0454e138a426ed6735b5989c8&plugin=AMap.Buildings,AMap.Scale,AMap.ToolBar,AMap.Circle,AMap.GeometryUtil"></script>
     
     <script>
         let map;
@@ -114,12 +114,13 @@
             // 添加地图点击事件 - 检测点击位置
             map.on('click', (e) => {
                 const clickLngLat = e.lnglat;
+                const clickPos = [clickLngLat.lng, clickLngLat.lat];
                 let clickedArea = null;
                 let minDistance = Infinity;
 
-                // 检查点击位置是否在某个区域内
+                // 检查点击位置是否在某个区域内（使用简单的距离计算）
                 areasData.forEach(area => {
-                    const distance = AMap.GeometryUtil.distance(clickLngLat, area.center);
+                    const distance = calculateDistance(clickPos, area.center);
                     if (distance <= area.radius && distance < minDistance) {
                         minDistance = distance;
                         clickedArea = area;
@@ -131,6 +132,22 @@
                     window.parent.postMessage({ type: 'areaClick', name: clickedArea.name }, '*');
                 }
             });
+        }
+
+        // 计算两点间距离（米）
+        function calculateDistance(p1, p2) {
+            const R = 6371000; // 地球半径（米）
+            const lat1 = p1[1] * Math.PI / 180;
+            const lat2 = p2[1] * Math.PI / 180;
+            const deltaLat = (p2[1] - p1[1]) * Math.PI / 180;
+            const deltaLng = (p2[0] - p1[0]) * Math.PI / 180;
+
+            const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+                      Math.cos(lat1) * Math.cos(lat2) *
+                      Math.sin(deltaLng/2) * Math.sin(deltaLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            return R * c;
         }
         
         // 监听父页面消息
