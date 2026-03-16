@@ -65,6 +65,16 @@
             pointer-events: auto;
         }
 
+        /* 侧边栏标题 */
+        .sidebar-title {
+            color: #1a1a2e;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #00d4ff;
+        }
+
         /* 侧边栏头部 */
         .sidebar-header {
             display: flex;
@@ -377,12 +387,6 @@
         <p>正在加载上海区域地图...</p>
     </div>
 
-    <!-- 标题 -->
-    <div class="header ui-element">
-        <h1>🏙️ 上海3D区域地图</h1>
-        <p>点击区域查看详情（iframe版）</p>
-    </div>
-
     <!-- 夜景模式按钮 -->
     <button id="night-mode" class="night-mode-btn ui-element">🌙 夜景模式</button>
 
@@ -398,6 +402,7 @@
 
     <!-- 区域导航侧边栏 -->
     <div class="sidebar ui-element" id="sidebar">
+        <div class="sidebar-title">🏙️ 上海3D区域地图</div>
         <div class="sidebar-header">
             <h3>🎯 特色区域 (12个)</h3>
             <button id="toggle-sidebar" class="toggle-sidebar-btn" title="收起">▼</button>
@@ -417,9 +422,6 @@
                 <li data-area="jingan-temple-area"><span class="area-tag" style="background: #ee5a6f;"></span>静安寺商圈</li>
                 <li data-area="lujiazui-area"><span class="area-tag" style="background: #00d4ff;"></span>陆家嘴金融区</li>
             </ul>
-            <p style="font-size: 11px; color: #888; text-align: center;">
-                💡 点击区域查看详情
-            </p>
         </div>
     </div>
 
