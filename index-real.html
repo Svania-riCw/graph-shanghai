@@ -154,31 +154,50 @@
     <!-- 调试脚本：确保DOM加载完成 -->
     <script>
         // 确保DOM加载完成后执行
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('DOM加载完成');
-                console.log('street-list:', document.getElementById('street-list'));
-                console.log('测试点击事件绑定...');
-            });
-        } else {
-            console.log('DOM已加载');
-            console.log('street-list:', document.getElementById('street-list'));
-        }
-        
-        // 测试点击
-        setTimeout(function() {
+        window.addEventListener('load', function() {
+            console.log('页面完全加载');
+            
             const streetList = document.getElementById('street-list');
+            const landmarkList = document.getElementById('landmark-list');
+            
+            console.log('street-list:', streetList);
+            console.log('landmark-list:', landmarkList);
+            
             if (streetList) {
-                console.log('找到street-list，绑定测试点击事件');
+                console.log('street-list子元素数:', streetList.children.length);
+                
+                // 直接绑定点击事件
                 streetList.addEventListener('click', function(e) {
+                    console.log('street-list被点击', e.target);
                     if (e.target.tagName === 'LI') {
-                        console.log('点击了:', e.target.textContent);
+                        console.log('✅ 点击了街道:', e.target.textContent);
+                        alert('点击了: ' + e.target.textContent);
                     }
                 });
-            } else {
-                console.error('未找到street-list元素');
+                console.log('✅ street-list点击事件已绑定');
             }
-        }, 2000);
+            
+            if (landmarkList) {
+                landmarkList.addEventListener('click', function(e) {
+                    console.log('landmark-list被点击', e.target);
+                    if (e.target.tagName === 'LI') {
+                        console.log('✅ 点击了地标:', e.target.textContent);
+                        alert('点击了: ' + e.target.textContent);
+                    }
+                });
+                console.log('✅ landmark-list点击事件已绑定');
+            }
+            
+            // 测试按钮点击
+            const resetBtn = document.getElementById('reset-view');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    console.log('✅ 重置视角按钮被点击');
+                    alert('重置视角按钮工作正常');
+                });
+                console.log('✅ 重置视角按钮事件已绑定');
+            }
+        });
     </script>
 
 </body>
