@@ -101,17 +101,18 @@
                 // 保存区域数据
                 areasData.push(area);
 
-                // 创建圆形 - 增强可见性
+                // 创建圆形 - 增强可见性，设置高zIndex
                 const circle = new AMap.Circle({
                     center: area.center,
                     radius: area.radius,
                     fillColor: area.color,
-                    fillOpacity: 0.5,
+                    fillOpacity: 0.6,
                     strokeColor: area.color,
-                    strokeWeight: 4,
+                    strokeWeight: 5,
                     strokeOpacity: 1.0,
                     cursor: 'pointer',
-                    extData: { name: area.name }
+                    extData: { name: area.name },
+                    zIndex: 100
                 });
 
                 // 点击事件
@@ -126,13 +127,14 @@
                 // 保存区域对象
                 areaObjects[area.name] = { circle, marker: null, visible: false };
 
-                // 创建标记
+                // 创建标记 - 设置高zIndex
                 const marker = new AMap.Marker({
                     position: area.center,
                     title: area.name,
                     cursor: 'pointer',
+                    zIndex: 101,
                     label: {
-                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">${area.name}</div>`,
+                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 2px solid white;">${area.name}</div>`,
                         offset: new AMap.Pixel(0, -35)
                     }
                 });
