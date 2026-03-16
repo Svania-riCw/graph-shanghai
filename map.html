@@ -244,9 +244,12 @@
             } else if (e.data && e.data.type === 'toggleArea') {
                 // 显示/隐藏切换指定区域
                 const areaName = e.data.name;
-                console.log('切换区域显示:', areaName);
+                console.log('收到 toggleArea 消息:', areaName);
+                console.log('areaObjects:', Object.keys(areaObjects));
                 if (areaObjects[areaName]) {
+                    console.log('找到区域对象:', areaName);
                     const obj = areaObjects[areaName];
+                    console.log('当前可见状态:', obj.visible);
                     if (obj.visible) {
                         // 如果已显示，则隐藏
                         map.remove(obj.circle);
@@ -263,6 +266,8 @@
                         const center = obj.circle.getCenter();
                         map.setZoomAndCenter(15, center);
                     }
+                } else {
+                    console.error('未找到区域:', areaName);
                 }
             }
         });
