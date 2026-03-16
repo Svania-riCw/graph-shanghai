@@ -67,6 +67,19 @@
             }
 
             console.log('地图初始化完成');
+            
+            // 添加测试圆圈 - 直接显示在地图中心
+            const testCircle = new AMap.Circle({
+                center: [121.4737, 31.2304],
+                radius: 1000,
+                fillColor: '#ff0000',
+                fillOpacity: 0.5,
+                strokeColor: '#ffffff',
+                strokeWeight: 5,
+                strokeOpacity: 1
+            });
+            map.add(testCircle);
+            console.log('测试圆圈已添加');
         }
         
         // 存储区域数据用于点击检测
@@ -101,18 +114,17 @@
                 // 保存区域数据
                 areasData.push(area);
 
-                // 创建圆形 - 使用CircleMarker确保可见
-                const circle = new AMap.CircleMarker({
+                // 创建圆形
+                const circle = new AMap.Circle({
                     center: area.center,
-                    radius: 50,
+                    radius: area.radius,
                     fillColor: area.color,
-                    fillOpacity: 0.8,
+                    fillOpacity: 0.6,
                     strokeColor: '#ffffff',
-                    strokeWeight: 3,
+                    strokeWeight: 4,
                     strokeOpacity: 1.0,
                     cursor: 'pointer',
-                    extData: { name: area.name },
-                    zIndex: 1000
+                    extData: { name: area.name }
                 });
 
                 // 点击事件
