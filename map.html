@@ -27,7 +27,11 @@
                 zoom: 14,
                 center: [121.4737, 31.2304],
                 mapStyle: 'amap://styles/darkblue',
-                showBuildingBlock: true
+                showBuildingBlock: true,
+                dragEnable: true,
+                zoomEnable: true,
+                rotateEnable: true,
+                pitchEnable: true
             });
             
             // 添加3D建筑
@@ -186,10 +190,12 @@
                 }
             } else if (e.data === 'zoomIn') {
                 console.log('放大');
-                map.zoomIn();
+                const currentZoom = map.getZoom();
+                map.setZoom(currentZoom + 1);
             } else if (e.data === 'zoomOut') {
                 console.log('缩小');
-                map.zoomOut();
+                const currentZoom = map.getZoom();
+                map.setZoom(currentZoom - 1);
             }
         });
         

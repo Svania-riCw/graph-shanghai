@@ -13,7 +13,7 @@
             background: #1a1a2e;
         }
         
-        /* 地图iframe - 放在底层 */
+        /* 地图iframe - 放在底层，支持鼠标拖动 */
         #map-frame {
             position: fixed;
             top: 0;
@@ -22,6 +22,7 @@
             height: 100%;
             border: none;
             z-index: 1;
+            pointer-events: auto;
         }
         
         /* UI层 - 绝对在最上层 */
