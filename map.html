@@ -32,11 +32,11 @@
             console.log('开始初始化地图...');
             map = new AMap.Map('amap-container', {
                 viewMode: '3D',
-                pitch: 0,
+                pitch: 60,
                 zoom: 14,
                 center: [121.4737, 31.2304],
                 mapStyle: 'amap://styles/darkblue',
-                showBuildingBlock: false,
+                showBuildingBlock: true,
                 dragEnable: true,
                 zoomEnable: true,
                 rotateEnable: true,
@@ -227,15 +227,15 @@
                     console.log('显示新区域:', areaName);
                     const config = obj.config;
                     
-                    // 创建新的 Circle
+                    // 创建新的 Circle - 恢复原来的颜色配置
                     obj.circle = new AMap.Circle({
                         center: config.center,
                         radius: config.radius,
                         fillColor: config.color,
-                        fillOpacity: 0.8,
-                        strokeColor: '#ffffff',
-                        strokeWeight: 5,
-                        strokeOpacity: 1.0,
+                        fillOpacity: 0.3,
+                        strokeColor: config.color,
+                        strokeWeight: 2,
+                        strokeOpacity: 0.8,
                         cursor: 'pointer',
                         zIndex: 9999
                     });
@@ -245,14 +245,14 @@
                         window.parent.postMessage({ type: 'areaClick', name: config.name }, '*');
                     });
                     
-                    // 创建新的 Marker
+                    // 创建新的 Marker - 恢复原来的样式
                     obj.marker = new AMap.Marker({
                         position: config.center,
                         title: config.name,
                         cursor: 'pointer',
                         zIndex: 10000,
                         label: {
-                            content: `<div style="background: ${config.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 2px solid white;">${config.name}</div>`,
+                            content: `<div style="background: ${config.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">${config.name}</div>`,
                             offset: new AMap.Pixel(0, -35)
                         }
                     });
