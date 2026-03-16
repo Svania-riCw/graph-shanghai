@@ -14,13 +14,22 @@
     <div id="amap-container"></div>
     
     <script src="https://webapi.amap.com/maps?v=2.0&key=6fc614d0454e138a426ed6735b5989c8&plugin=AMap.Buildings,AMap.Scale,AMap.ToolBar,AMap.Circle,AMap.GeometryUtil"></script>
-    
+
     <script>
+        // 检查高德地图 API 是否加载
+        if (typeof AMap === 'undefined') {
+            document.body.innerHTML = '<div style="color:white; text-align:center; padding-top:50px;">高德地图 API 加载失败，请检查网络连接</div>';
+            throw new Error('AMap not loaded');
+        }
+        
+        console.log('高德地图 API 加载成功');
+        
         let map;
         let areaCircles = [];
-        
+
         // 初始化地图
         function init() {
+            console.log('开始初始化地图...');
             map = new AMap.Map('amap-container', {
                 viewMode: '3D',
                 pitch: 60,
@@ -43,12 +52,20 @@
             map.add(buildings);
             
             // 添加区域圆形
-            addAreaCircles();
-            
+            try {
+                addAreaCircles();
+            } catch (e) {
+                console.error('添加区域圆形失败:', e);
+            }
+
             // 添加控件
-            map.addControl(new AMap.Scale());
-            map.addControl(new AMap.ToolBar({ position: 'RB' }));
-            
+            try {
+                map.addControl(new AMap.Scale());
+                map.addControl(new AMap.ToolBar({ position: 'RB' }));
+            } catch (e) {
+                console.error('添加控件失败:', e);
+            }
+
             console.log('地图初始化完成');
         }
         
@@ -58,6 +75,13 @@
 
         // 添加区域圆形
         function addAreaCircles() {
+            console.log('addAreaCircles 函数被调用');
+            
+            if (!map) {
+                console.error('地图未初始化');
+                return;
+            }
+            
             const areas = [
                 { name: '南京路商圈', center: [121.4737, 31.2348], radius: 800, color: '#ff6b6b' },
                 { name: '淮海路商圈', center: [121.4636, 31.2183], radius: 1000, color: '#4ecdc4' },
@@ -97,7 +121,12 @@
                 });
 
                 // 添加到地图
-                map.add(circle);
+                try {
+                    map.add(circle);
+                    console.log('圆形已添加到地图:', area.name);
+                } catch (e) {
+                    console.error('添加圆形失败:', area.name, e);
+                }
                 areaCircles.push(circle);
 
                 // 保存区域对象
@@ -119,13 +148,17 @@
                     window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
                 });
 
-                map.add(marker);
+                try {
+                    map.add(marker);
+                    console.log('标记已添加到地图:', area.name);
+                } catch (e) {
+                    console.error('添加标记失败:', area.name, e);
+                }
                 areaObjects[area.name].marker = marker;
-                
-                console.log('创建区域:', area.name);
             });
             
             console.log('所有区域创建完成，共', areas.length, '个');
+            console.log('areaCircles 数组长度:', areaCircles.length);
 
             // 添加地图点击事件 - 检测点击位置
             map.on('click', (e) => {
