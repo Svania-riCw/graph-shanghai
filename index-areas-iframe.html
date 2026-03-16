@@ -25,18 +25,8 @@
             pointer-events: auto;
         }
         
-        /* UI层 - 绝对在最上层 */
-        #ui-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-        }
-        
-        #ui-layer > * {
+        /* UI元素直接定位，不使用全屏覆盖层 */
+        .ui-element {
             pointer-events: auto;
         }
         
@@ -335,72 +325,69 @@
 <body>
     <!-- 地图iframe - 完全隔离 -->
     <iframe id="map-frame" src="map.html"></iframe>
-    
-    <!-- UI层 -->
-    <div id="ui-layer">
-        <!-- 加载画面 -->
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
-            <p>正在加载上海区域地图...</p>
-        </div>
 
-        <!-- 标题 -->
-        <div class="header">
-            <h1>🏙️ 上海3D区域地图</h1>
-            <p>点击区域查看详情（iframe版）</p>
-        </div>
+    <!-- 加载画面 -->
+    <div id="loading" class="loading ui-element">
+        <div class="loading-spinner"></div>
+        <p>正在加载上海区域地图...</p>
+    </div>
 
-        <!-- 夜景模式按钮 -->
-        <button id="night-mode" class="night-mode-btn">🌙 夜景模式</button>
+    <!-- 标题 -->
+    <div class="header ui-element">
+        <h1>🏙️ 上海3D区域地图</h1>
+        <p>点击区域查看详情（iframe版）</p>
+    </div>
 
-        <!-- 控制面板 -->
-        <div class="controls">
-            <button id="reset-view">🔄 重置视角</button>
-            <button id="toggle-rotate">🔄 自动旋转</button>
-            <div class="zoom-controls">
-                <button id="zoom-in">+</button>
-                <button id="zoom-out">-</button>
-            </div>
-        </div>
+    <!-- 夜景模式按钮 -->
+    <button id="night-mode" class="night-mode-btn ui-element">🌙 夜景模式</button>
 
-        <!-- 区域导航侧边栏 -->
-        <div class="sidebar">
-            <h3>🎯 特色区域 (12个)</h3>
-            <ul id="area-list">
-                <li data-area="nanjing-road-area"><span class="area-tag" style="background: #ff6b6b;"></span>南京路商圈</li>
-                <li data-area="huaihai-road-area"><span class="area-tag" style="background: #4ecdc4;"></span>淮海路商圈</li>
-                <li data-area="the-bund-area"><span class="area-tag" style="background: #ffd93d;"></span>外滩历史文化区</li>
-                <li data-area="yuyuan-area"><span class="area-tag" style="background: #95e1d3;"></span>豫园老城厢</li>
-                <li data-area="xintiandi-area"><span class="area-tag" style="background: #f38181;"></span>新天地石库门区</li>
-                <li data-area="tianzifang-area"><span class="area-tag" style="background: #aa96da;"></span>田子坊创意区</li>
-                <li data-area="wukang-road-area"><span class="area-tag" style="background: #fcbad3;"></span>武康路名人故居区</li>
-                <li data-area="sinan-road-area"><span class="area-tag" style="background: #a8d8ea;"></span>思南路梧桐区</li>
-                <li data-area="shaanxi-south-road"><span class="area-tag" style="background: #ff9f43;"></span>陕西南路商圈</li>
-                <li data-area="chongqing-north-road"><span class="area-tag" style="background: #10ac84;"></span>重庆北路商务区</li>
-                <li data-area="jingan-temple-area"><span class="area-tag" style="background: #ee5a6f;"></span>静安寺商圈</li>
-                <li data-area="lujiazui-area"><span class="area-tag" style="background: #00d4ff;"></span>陆家嘴金融区</li>
-            </ul>
-            <p style="font-size: 11px; color: #888; text-align: center;">
-                💡 点击区域查看详情
-            </p>
+    <!-- 控制面板 -->
+    <div class="controls ui-element">
+        <button id="reset-view">🔄 重置视角</button>
+        <button id="toggle-rotate">🔄 自动旋转</button>
+        <div class="zoom-controls">
+            <button id="zoom-in">+</button>
+            <button id="zoom-out">-</button>
         </div>
+    </div>
 
-        <!-- 信息面板 -->
-        <div id="info-panel" class="info-panel">
-            <button class="close-btn" id="close-info">×</button>
-            <h2 id="info-title">标题</h2>
-            <span id="info-tag" class="tag">标签</span>
-            <p id="info-desc">描述</p>
-            <h4>包含街道</h4>
-            <p id="info-streets"></p>
-            <h4>📍 著名地点</h4>
-            <ul id="info-points"></ul>
-        </div>
+    <!-- 区域导航侧边栏 -->
+    <div class="sidebar ui-element">
+        <h3>🎯 特色区域 (12个)</h3>
+        <ul id="area-list">
+            <li data-area="nanjing-road-area"><span class="area-tag" style="background: #ff6b6b;"></span>南京路商圈</li>
+            <li data-area="huaihai-road-area"><span class="area-tag" style="background: #4ecdc4;"></span>淮海路商圈</li>
+            <li data-area="the-bund-area"><span class="area-tag" style="background: #ffd93d;"></span>外滩历史文化区</li>
+            <li data-area="yuyuan-area"><span class="area-tag" style="background: #95e1d3;"></span>豫园老城厢</li>
+            <li data-area="xintiandi-area"><span class="area-tag" style="background: #f38181;"></span>新天地石库门区</li>
+            <li data-area="tianzifang-area"><span class="area-tag" style="background: #aa96da;"></span>田子坊创意区</li>
+            <li data-area="wukang-road-area"><span class="area-tag" style="background: #fcbad3;"></span>武康路名人故居区</li>
+            <li data-area="sinan-road-area"><span class="area-tag" style="background: #a8d8ea;"></span>思南路梧桐区</li>
+            <li data-area="shaanxi-south-road"><span class="area-tag" style="background: #ff9f43;"></span>陕西南路商圈</li>
+            <li data-area="chongqing-north-road"><span class="area-tag" style="background: #10ac84;"></span>重庆北路商务区</li>
+            <li data-area="jingan-temple-area"><span class="area-tag" style="background: #ee5a6f;"></span>静安寺商圈</li>
+            <li data-area="lujiazui-area"><span class="area-tag" style="background: #00d4ff;"></span>陆家嘴金融区</li>
+        </ul>
+        <p style="font-size: 11px; color: #888; text-align: center;">
+            💡 点击区域查看详情
+        </p>
+    </div>
 
-        <!-- API Key提示 -->
-        <div id="api-key-notice">
-            ⚠️ 请在代码中配置您的高德地图API Key
-        </div>
+    <!-- 信息面板 -->
+    <div id="info-panel" class="info-panel ui-element">
+        <button class="close-btn" id="close-info">×</button>
+        <h2 id="info-title">标题</h2>
+        <span id="info-tag" class="tag">标签</span>
+        <p id="info-desc">描述</p>
+        <h4>包含街道</h4>
+        <p id="info-streets"></p>
+        <h4>📍 著名地点</h4>
+        <ul id="info-points"></ul>
+    </div>
+
+    <!-- API Key提示 -->
+    <div id="api-key-notice" class="ui-element">
+        ⚠️ 请在代码中配置您的高德地图API Key
     </div>
     
     <script>
