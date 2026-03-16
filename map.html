@@ -54,6 +54,7 @@
         
         // 存储区域数据用于点击检测
         const areasData = [];
+        const areaObjects = {}; // 存储区域对象，用于显示/隐藏
 
         // 添加区域圆形
         function addAreaCircles() {
@@ -84,7 +85,8 @@
                     strokeColor: area.color,
                     strokeWeight: 3,
                     strokeOpacity: 0.9,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    visible: false
                 });
 
                 // 点击事件 - 通知父页面
@@ -97,11 +99,15 @@
                 map.add(circle);
                 areaCircles.push(circle);
 
+                // 保存区域对象
+                areaObjects[area.name] = { circle, marker: null };
+
                 // 中心标记
                 const marker = new AMap.Marker({
                     position: area.center,
                     title: area.name,
                     cursor: 'pointer',
+                    visible: false,
                     label: {
                         content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">${area.name}</div>`,
                         offset: new AMap.Pixel(0, -35)
@@ -115,6 +121,9 @@
                 });
 
                 map.add(marker);
+                
+                // 保存标记对象
+                areaObjects[area.name].marker = marker;
             });
 
             // 添加地图点击事件 - 检测点击位置
@@ -209,6 +218,30 @@
                 console.log('平视 - 减小pitch');
                 const currentPitch = map.getPitch();
                 map.setPitch(Math.max(currentPitch - 10, 0));
+            } else if (e.data && e.data.type === 'showArea') {
+                // 显示指定区域
+                const areaName = e.data.name;
+                console.log('显示区域:', areaName);
+                if (areaObjects[areaName]) {
+                    // 先隐藏所有区域
+                    Object.values(areaObjects).forEach(obj => {
+                        obj.circle.hide();
+                        obj.marker.hide();
+                    });
+                    // 显示指定区域
+                    areaObjects[areaName].circle.show();
+                    areaObjects[areaName].marker.show();
+                    // 移动到该区域
+                    const center = areaObjects[areaName].circle.getCenter();
+                    map.setZoomAndCenter(15, center);
+                }
+            } else if (e.data === 'hideAllAreas') {
+                // 隐藏所有区域
+                console.log('隐藏所有区域');
+                Object.values(areaObjects).forEach(obj => {
+                    obj.circle.hide();
+                    obj.marker.hide();
+                });
             }
         });
         

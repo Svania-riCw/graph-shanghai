@@ -516,6 +516,13 @@
             if (area) {
                 console.log('找到区域数据:', area.name);
                 showAreaInfo(area);
+                
+                // 通知iframe显示对应区域
+                const frame = document.getElementById('map-frame');
+                if (frame && frame.contentWindow) {
+                    console.log('发送显示区域消息:', area.name);
+                    frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
+                }
             } else {
                 console.log('未找到区域数据');
             }
@@ -529,6 +536,13 @@
                 const area = areasData.find(a => a.id === areaId);
                 if (area) {
                     showAreaInfo(area);
+                    
+                    // 通知iframe显示对应区域
+                    const frame = document.getElementById('map-frame');
+                    if (frame && frame.contentWindow) {
+                        console.log('发送显示区域消息:', area.name);
+                        frame.contentWindow.postMessage({ type: 'showArea', name: area.name }, '*');
+                    }
                 }
             };
         });
