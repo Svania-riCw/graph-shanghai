@@ -101,55 +101,16 @@
                 // 保存区域数据
                 areasData.push(area);
 
-                // 创建圆形 - 设置更高的zIndex确保在最上层
-                const circle = new AMap.Circle({
-                    center: area.center,
-                    radius: area.radius,
-                    fillColor: area.color,
-                    fillOpacity: 0.8,
-                    strokeColor: '#ffffff',
-                    strokeWeight: 5,
-                    strokeOpacity: 1.0,
-                    cursor: 'pointer',
-                    extData: { name: area.name },
-                    zIndex: 9999
-                });
-
-                // 点击事件
-                circle.on('click', (e) => {
-                    console.log('圆形被点击:', area.name);
-                    window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
-                });
-
-                // 不添加到地图，默认隐藏
-                areaCircles.push(circle);
-
-                // 保存区域对象
-                areaObjects[area.name] = { circle, marker: null, visible: false };
-
-                // 创建标记 - 设置更高的zIndex
-                const marker = new AMap.Marker({
-                    position: area.center,
-                    title: area.name,
-                    cursor: 'pointer',
-                    zIndex: 10000,
-                    label: {
-                        content: `<div style="background: ${area.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 2px solid white;">${area.name}</div>`,
-                        offset: new AMap.Pixel(0, -35)
-                    }
-                });
-
-                marker.on('click', () => {
-                    console.log('标记被点击:', area.name);
-                    window.parent.postMessage({ type: 'areaClick', name: area.name }, '*');
-                });
-
-                // 不添加到地图，默认隐藏
-                areaObjects[area.name].marker = marker;
+                // 保存区域配置，不预先创建 Circle
+                areaObjects[area.name] = { 
+                    config: area,
+                    circle: null, 
+                    marker: null, 
+                    visible: false 
+                };
             });
             
-            console.log('所有区域创建完成，共', areas.length, '个');
-            console.log('areaCircles 数组长度:', areaCircles.length);
+            console.log('所有区域配置完成，共', areas.length, '个');
             console.log('areaObjects 键:', Object.keys(areaObjects));
 
             // 添加地图点击事件 - 检测点击位置
@@ -248,36 +209,63 @@
                 // 显示/隐藏切换指定区域
                 const areaName = e.data.name;
                 console.log('收到 toggleArea 消息:', areaName);
-                console.log('areaObjects:', Object.keys(areaObjects));
                 if (areaObjects[areaName]) {
-                    console.log('找到区域对象:', areaName);
                     const obj = areaObjects[areaName];
                     console.log('当前可见状态:', obj.visible);
                     if (obj.visible) {
                         // 如果已显示，则隐藏
-                        map.remove(obj.circle);
-                        map.remove(obj.marker);
+                        if (obj.circle) map.remove(obj.circle);
+                        if (obj.marker) map.remove(obj.marker);
                         obj.visible = false;
                         console.log('隐藏区域:', areaName);
                     } else {
-                        // 如果未显示，则显示
-                        console.log('准备添加圆圈:', areaName);
+                        // 如果未显示，则动态创建并显示
+                        console.log('动态创建圆圈:', areaName);
+                        const config = obj.config;
+                        
+                        // 创建新的 Circle
+                        obj.circle = new AMap.Circle({
+                            center: config.center,
+                            radius: config.radius,
+                            fillColor: config.color,
+                            fillOpacity: 0.8,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 5,
+                            strokeOpacity: 1.0,
+                            cursor: 'pointer',
+                            zIndex: 9999
+                        });
+                        
+                        obj.circle.on('click', () => {
+                            console.log('圆形被点击:', config.name);
+                            window.parent.postMessage({ type: 'areaClick', name: config.name }, '*');
+                        });
+                        
+                        // 创建新的 Marker
+                        obj.marker = new AMap.Marker({
+                            position: config.center,
+                            title: config.name,
+                            cursor: 'pointer',
+                            zIndex: 10000,
+                            label: {
+                                content: `<div style="background: ${config.color}; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 2px solid white;">${config.name}</div>`,
+                                offset: new AMap.Pixel(0, -35)
+                            }
+                        });
+                        
+                        obj.marker.on('click', () => {
+                            console.log('标记被点击:', config.name);
+                            window.parent.postMessage({ type: 'areaClick', name: config.name }, '*');
+                        });
+                        
                         map.add(obj.circle);
                         map.add(obj.marker);
                         
-                        // 将圆圈和标记移到最上层
-                        if (obj.circle.bringToFront) {
-                            obj.circle.bringToFront();
-                        }
-                        if (obj.marker.bringToFront) {
-                            obj.marker.bringToFront();
-                        }
-                        
                         obj.visible = true;
                         console.log('显示区域完成:', areaName);
+                        
                         // 移动到该区域
-                        const center = obj.circle.getCenter();
-                        map.setZoomAndCenter(15, center);
+                        map.setZoomAndCenter(15, config.center);
                     }
                 } else {
                     console.error('未找到区域:', areaName);
