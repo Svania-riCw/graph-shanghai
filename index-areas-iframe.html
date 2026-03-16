@@ -555,7 +555,18 @@
         setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
         }, 2000);
-        
+
+        // 监听iframe传来的地图点击事件
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.type === 'areaClick') {
+                const areaName = e.data.name;
+                const area = areasData.find(a => a.name === areaName);
+                if (area) {
+                    showAreaInfo(area);
+                }
+            }
+        });
+
         console.log('iframe版区域地图加载完成');
     </script>
 </body>
