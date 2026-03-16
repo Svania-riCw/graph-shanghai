@@ -43,13 +43,13 @@
                 pitchEnable: true
             });
             
-            // 添加3D建筑
-            const buildings = new AMap.Buildings({
-                zooms: [14, 20],
-                zIndex: 10,
-                heightFactor: 1.5
-            });
-            map.add(buildings);
+            // 添加3D建筑 - 暂时禁用以测试圆圈显示
+            // const buildings = new AMap.Buildings({
+            //     zooms: [14, 20],
+            //     zIndex: 10,
+            //     heightFactor: 1.5
+            // });
+            // map.add(buildings);
             
             // 添加区域圆形
             try {
