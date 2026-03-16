@@ -57,48 +57,59 @@
             top: 100px;
             left: 20px;
             width: 220px;
-            max-height: calc(100vh - 140px);
             background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             padding: 15px;
-            overflow-y: auto;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             z-index: 9999;
             pointer-events: auto;
-            transition: transform 0.3s ease;
         }
 
-        .sidebar.collapsed {
-            transform: translateX(-260px);
+        /* 侧边栏头部 */
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header h3 {
+            margin: 0;
+            color: #1a1a2e;
+            font-size: 14px;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        /* 侧边栏内容 */
+        .sidebar-content {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .sidebar-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
         }
 
         /* 侧边栏收起按钮 */
         .toggle-sidebar-btn {
-            position: absolute;
-            right: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.95);
+            width: 28px;
+            height: 28px;
+            background: rgba(0, 0, 0, 0.05);
             border: none;
-            border-radius: 0 8px 8px 0;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             color: #1a1a2e;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             transition: all 0.3s;
-            z-index: 10000;
         }
 
         .toggle-sidebar-btn:hover {
             background: #00d4ff;
             color: white;
-        }
-
-        .sidebar.collapsed .toggle-sidebar-btn {
-            right: -30px;
-            border-radius: 0 8px 8px 0;
         }
         
         .sidebar h3 {
@@ -387,25 +398,29 @@
 
     <!-- 区域导航侧边栏 -->
     <div class="sidebar ui-element" id="sidebar">
-        <button id="toggle-sidebar" class="toggle-sidebar-btn" title="收起侧边栏">◀</button>
-        <h3>🎯 特色区域 (12个)</h3>
-        <ul id="area-list">
-            <li data-area="nanjing-road-area"><span class="area-tag" style="background: #ff6b6b;"></span>南京路商圈</li>
-            <li data-area="huaihai-road-area"><span class="area-tag" style="background: #4ecdc4;"></span>淮海路商圈</li>
-            <li data-area="the-bund-area"><span class="area-tag" style="background: #ffd93d;"></span>外滩历史文化区</li>
-            <li data-area="yuyuan-area"><span class="area-tag" style="background: #95e1d3;"></span>豫园老城厢</li>
-            <li data-area="xintiandi-area"><span class="area-tag" style="background: #f38181;"></span>新天地石库门区</li>
-            <li data-area="tianzifang-area"><span class="area-tag" style="background: #aa96da;"></span>田子坊创意区</li>
-            <li data-area="wukang-road-area"><span class="area-tag" style="background: #fcbad3;"></span>武康路名人故居区</li>
-            <li data-area="sinan-road-area"><span class="area-tag" style="background: #a8d8ea;"></span>思南路梧桐区</li>
-            <li data-area="shaanxi-south-road"><span class="area-tag" style="background: #ff9f43;"></span>陕西南路商圈</li>
-            <li data-area="chongqing-north-road"><span class="area-tag" style="background: #10ac84;"></span>重庆北路商务区</li>
-            <li data-area="jingan-temple-area"><span class="area-tag" style="background: #ee5a6f;"></span>静安寺商圈</li>
-            <li data-area="lujiazui-area"><span class="area-tag" style="background: #00d4ff;"></span>陆家嘴金融区</li>
-        </ul>
-        <p style="font-size: 11px; color: #888; text-align: center;">
-            💡 点击区域查看详情
-        </p>
+        <div class="sidebar-header">
+            <h3>🎯 特色区域 (12个)</h3>
+            <button id="toggle-sidebar" class="toggle-sidebar-btn" title="收起">▼</button>
+        </div>
+        <div class="sidebar-content" id="sidebar-content">
+            <ul id="area-list">
+                <li data-area="nanjing-road-area"><span class="area-tag" style="background: #ff6b6b;"></span>南京路商圈</li>
+                <li data-area="huaihai-road-area"><span class="area-tag" style="background: #4ecdc4;"></span>淮海路商圈</li>
+                <li data-area="the-bund-area"><span class="area-tag" style="background: #ffd93d;"></span>外滩历史文化区</li>
+                <li data-area="yuyuan-area"><span class="area-tag" style="background: #95e1d3;"></span>豫园老城厢</li>
+                <li data-area="xintiandi-area"><span class="area-tag" style="background: #f38181;"></span>新天地石库门区</li>
+                <li data-area="tianzifang-area"><span class="area-tag" style="background: #aa96da;"></span>田子坊创意区</li>
+                <li data-area="wukang-road-area"><span class="area-tag" style="background: #fcbad3;"></span>武康路名人故居区</li>
+                <li data-area="sinan-road-area"><span class="area-tag" style="background: #a8d8ea;"></span>思南路梧桐区</li>
+                <li data-area="shaanxi-south-road"><span class="area-tag" style="background: #ff9f43;"></span>陕西南路商圈</li>
+                <li data-area="chongqing-north-road"><span class="area-tag" style="background: #10ac84;"></span>重庆北路商务区</li>
+                <li data-area="jingan-temple-area"><span class="area-tag" style="background: #ee5a6f;"></span>静安寺商圈</li>
+                <li data-area="lujiazui-area"><span class="area-tag" style="background: #00d4ff;"></span>陆家嘴金融区</li>
+            </ul>
+            <p style="font-size: 11px; color: #888; text-align: center;">
+                💡 点击区域查看详情
+            </p>
+        </div>
     </div>
 
     <!-- 信息面板 -->
@@ -690,8 +705,9 @@
         document.getElementById('toggle-sidebar').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('collapsed');
-            this.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
-            this.title = sidebar.classList.contains('collapsed') ? '展开侧边栏' : '收起侧边栏';
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            this.textContent = isCollapsed ? '▶' : '▼';
+            this.title = isCollapsed ? '展开' : '收起';
         });
 
         console.log('iframe版区域地图加载完成');
