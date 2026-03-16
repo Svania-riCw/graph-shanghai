@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上海3D街道地图 - 高德真实版</title>
+    <style>
+        /* 高德地图容器样式 */
+        #amap-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        /* 覆盖层 */
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        #overlay > * {
+            pointer-events: auto;
+        }
+        
+        /* 高德地图信息窗体样式 */
+        .amap-info-window {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+        }
+        
+        .amap-info-window h3 {
+            margin-bottom: 10px;
+            color: #1a1a2e;
+            font-size: 18px;
+        }
+        
+        .amap-info-window p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* 高德地图标记样式 */
+        .amap-marker-label {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: none;
+        }
+        
+        /* 加载提示 */
+        .amap-loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+    </style>
+  <script type="module" crossorigin src="./assets/real-BYP2zLG4.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/main-DD3Ksoh5.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-Dr0N0u5w.css">
+</head>
+<body>
+    <!-- 高德地图容器 -->
+    <div id="amap-container"></div>
+    
+    <!-- UI覆盖层 -->
+    <div id="overlay">
+        <!-- 加载画面 -->
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>正在加载高德地图...</p>
+        </div>
+
+        <!-- 标题 -->
+        <div class="header">
+            <h1>🏙️ 上海3D街道地图</h1>
+            <p>高德真实地图版 - 探索魔都</p>
+        </div>
+
+        <!-- 夜景模式按钮 -->
+        <button id="night-mode" class="night-mode-btn">🌙 夜景模式</button>
+
+        <!-- 控制面板 -->
+        <div class="controls">
+            <button id="reset-view">重置视角</button>
+            <button id="toggle-rotate">自动旋转</button>
+            <div class="zoom-controls">
+                <button id="zoom-in">+</button>
+                <button id="zoom-out">-</button>
+            </div>
+        </div>
+
+        <!-- 街道导航侧边栏 -->
+        <div class="sidebar">
+            <h3>🏙️ 主要街道</h3>
+            <ul id="street-list">
+                <li data-lng="121.4737" data-lat="31.2348">南京路步行街</li>
+                <li data-lng="121.4636" data-lat="31.2183">淮海路</li>
+                <li data-lng="121.4906" data-lat="31.2397">外滩</li>
+                <li data-lng="121.4922" data-lat="31.2272">豫园老街</li>
+                <li data-lng="121.4734" data-lat="31.2214">新天地</li>
+                <li data-lng="121.4668" data-lat="31.2103">田子坊</li>
+                <li data-lng="121.4546" data-lat="31.2045">武康路</li>
+                <li data-lng="121.4689" data-lat="31.2156">思南路</li>
+            </ul>
+            <h3>🏛️ 地标建筑</h3>
+            <ul id="landmark-list">
+                <li data-lng="121.4956" data-lat="31.2397">东方明珠</li>
+                <li data-lng="121.5018" data-lat="31.2304">上海中心大厦</li>
+                <li data-lng="121.4906" data-lat="31.2397">海关大楼</li>
+                <li data-lng="121.4922" data-lat="31.2272">城隍庙</li>
+            </ul>
+        </div>
+
+        <!-- 信息面板 -->
+        <div id="info-panel" class="info-panel hidden">
+            <button class="close-btn" id="close-info">×</button>
+            <h2 id="info-title">标题</h2>
+            <div id="info-content">内容</div>
+        </div>
+        
+        <!-- API Key提示 -->
+        <div id="api-key-notice" style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(255, 193, 7, 0.9); color: #333; padding: 10px 20px; border-radius: 8px; z-index: 1000; display: none;">
+            ⚠️ 请在代码中配置您的高德地图API Key
+        </div>
+    </div>
+
+    <!-- 高德地图API -->
+    <!-- 注意：请将 YOUR_AMAP_KEY 替换为您的高德地图API Key -->
+    <script src="https://webapi.amap.com/maps?v=2.0&key=YOUR_AMAP_KEY&plugin=AMap.Buildings,AMap.RoadNet"></script>
+    
+</body>
+</html>

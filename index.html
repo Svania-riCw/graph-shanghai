@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上海3D街道地图</title>
+  <script type="module" crossorigin src="./assets/main-D3qHfXB4.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/main-DD3Ksoh5.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-Dr0N0u5w.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 加载画面 -->
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>正在加载上海3D地图...</p>
+        </div>
+
+        <!-- 标题 -->
+        <div class="header">
+            <h1>🏙️ 上海3D街道地图</h1>
+            <p>探索魔都的街道与历史</p>
+        </div>
+
+        <!-- 夜景模式按钮 -->
+        <button id="night-mode" class="night-mode-btn">🌙 夜景模式</button>
+
+        <!-- 控制面板 -->
+        <div class="controls">
+            <button id="reset-view">重置视角</button>
+            <button id="toggle-rotate">自动旋转</button>
+            <div class="zoom-controls">
+                <button id="zoom-in">+</button>
+                <button id="zoom-out">-</button>
+            </div>
+        </div>
+
+        <!-- 街道导航侧边栏 -->
+        <div class="sidebar">
+            <h3>🏙️ 主要街道</h3>
+            <ul id="street-list">
+                <!-- 动态生成 -->
+            </ul>
+            <h3>🏛️ 地标建筑</h3>
+            <ul id="landmark-list">
+                <!-- 动态生成 -->
+            </ul>
+        </div>
+
+        <!-- 信息面板 -->
+        <div id="info-panel" class="info-panel hidden">
+            <button class="close-btn" id="close-info">×</button>
+            <h2 id="info-title">标题</h2>
+            <div id="info-content">内容</div>
+        </div>
+
+        <!-- 3D画布 -->
+        <canvas id="canvas"></canvas>
+    </div>
+
+</body>
+</html>
