@@ -346,8 +346,8 @@
         <button id="reset-view">🔄 重置视角</button>
         <button id="toggle-rotate">🔄 自动旋转</button>
         <div class="pitch-controls">
-            <button id="pitch-up">↕️ 平视</button>
-            <button id="pitch-down">↕️ 俯视</button>
+            <button id="pitch-up">↕️ 俯视</button>
+            <button id="pitch-down">↕️ 平视</button>
         </div>
     </div>
 
@@ -628,21 +628,21 @@
         });
 
         // 纵向变换（俯仰角）控制
-        // 平视按钮：减小pitch（更平）
-        document.getElementById('pitch-up').addEventListener('click', function() {
-            const frame = document.getElementById('map-frame');
-            if (frame && frame.contentWindow) {
-                console.log('发送平视消息（减小pitch）');
-                frame.contentWindow.postMessage('pitchDown', '*'); // pitchDown = 减小pitch = 平视
-            }
-        });
-
         // 俯视按钮：增加pitch（更俯视）
-        document.getElementById('pitch-down').addEventListener('click', function() {
+        document.getElementById('pitch-up').addEventListener('click', function() {
             const frame = document.getElementById('map-frame');
             if (frame && frame.contentWindow) {
                 console.log('发送俯视消息（增加pitch）');
                 frame.contentWindow.postMessage('pitchUp', '*'); // pitchUp = 增加pitch = 俯视
+            }
+        });
+
+        // 平视按钮：减小pitch（更平）
+        document.getElementById('pitch-down').addEventListener('click', function() {
+            const frame = document.getElementById('map-frame');
+            if (frame && frame.contentWindow) {
+                console.log('发送平视消息（减小pitch）');
+                frame.contentWindow.postMessage('pitchDown', '*'); // pitchDown = 减小pitch = 平视
             }
         });
 
