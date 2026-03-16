@@ -210,13 +210,13 @@
                 const currentZoom = map.getZoom();
                 map.setZoom(currentZoom - 1);
             } else if (e.data === 'pitchUp') {
-                console.log('俯视 - 增加pitch');
-                const currentPitch = map.getPitch();
-                map.setPitch(Math.min(currentPitch + 10, 80));
-            } else if (e.data === 'pitchDown') {
                 console.log('平视 - 减小pitch');
                 const currentPitch = map.getPitch();
                 map.setPitch(Math.max(currentPitch - 10, 0));
+            } else if (e.data === 'pitchDown') {
+                console.log('俯视 - 增加pitch');
+                const currentPitch = map.getPitch();
+                map.setPitch(Math.min(currentPitch + 10, 80));
             } else if (e.data && e.data.type === 'showArea') {
                 // 显示/切换指定区域
                 const areaName = e.data.name;
