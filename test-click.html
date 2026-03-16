@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点击测试</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* 模拟地图层 */
+        #map-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            z-index: 1;
+        }
+        
+        /* UI层 */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        
+        #ui-layer > * {
+            pointer-events: auto;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            width: 200px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 15px;
+            z-index: 1001;
+            color: #333;
+        }
+        
+        .sidebar h3 {
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #00d4ff;
+        }
+        
+        .sidebar li {
+            padding: 10px;
+            margin-bottom: 5px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            list-style: none;
+        }
+        
+        .sidebar li:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        /* 标题 */
+        .header {
+            position: fixed;
+            top: 20px;
+            left: 240px;
+            z-index: 1001;
+        }
+        
+        /* 按钮 */
+        .btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background: #00d4ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1001;
+        }
+        
+        /* 日志 */
+        #log {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 300px;
+            max-height: 200px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1001;
+        }
+        
+        .log-item {
+            margin-bottom: 5px;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- 地图层 -->
+    <div id="map-layer">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: rgba(255,255,255,0.3);">
+            <h1>地图层</h1>
+            <p>这里应该是高德地图</p>
+        </div>
+    </div>
+    
+    <!-- UI层 -->
+    <div id="ui-layer">
+        <!-- 标题 -->
+        <div class="header">
+            <h1>🏙️ 点击测试页面</h1>
+            <p>测试UI层点击是否正常</p>
+        </div>
+        
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <h3>🎯 测试列表</h3>
+            <ul id="test-list">
+                <li onclick="handleClick('项目1')">👉 点击测试 1</li>
+                <li onclick="handleClick('项目2')">👉 点击测试 2</li>
+                <li onclick="handleClick('项目3')">👉 点击测试 3</li>
+            </ul>
+            <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                如果点击没反应，说明有遮挡层
+            </p>
+        </div>
+        
+        <!-- 测试按钮 -->
+        <button class="btn" onclick="handleClick('大按钮')">
+            🖱️ 点击测试按钮
+        </button>
+        
+        <!-- 日志 -->
+        <div id="log">
+            <div style="color: #00d4ff; margin-bottom: 10px;">📋 点击日志：</div>
+        </div>
+    </div>
+    
+    <script>
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            const item = document.createElement('div');
+            item.className = 'log-item';
+            item.textContent = `[${time}] ${msg}`;
+            logDiv.appendChild(item);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function handleClick(name) {
+            log(`✅ 点击了: ${name}`);
+            alert(`点击成功: ${name}`);
+        }
+        
+        // 页面加载日志
+        window.addEventListener('load', function() {
+            log('页面加载完成');
+            log('等待点击...');
+        });
+        
+        // 测试事件委托
+        document.getElementById('test-list').addEventListener('click', function(e) {
+            log(`事件委托捕获: ${e.target.textContent}`);
+        });
+    </script>
+</body>
+</html>
