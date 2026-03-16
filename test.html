@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>诊断测试 - 上海3D地图</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a2e; color: white; }
+        .test-box { background: rgba(255,255,255,0.1); padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { color: #4ecdc4; }
+        .error { color: #ff6b6b; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        #log { background: rgba(0,0,0,0.5); padding: 10px; margin-top: 20px; max-height: 300px; overflow-y: auto; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>🔍 诊断测试页面</h1>
+    
+    <div class="test-box">
+        <h3>测试1：检查高德地图API</h3>
+        <button onclick="testAMap()">测试高德API</button>
+        <div id="amap-result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>测试2：检查页面元素</h3>
+        <button onclick="testElements()">测试元素</button>
+        <div id="element-result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>测试3：检查点击事件</h3>
+        <button onclick="testClick()">测试点击</button>
+        <ul id="test-list">
+            <li data-name="测试项1">点击我测试1</li>
+            <li data-name="测试项2">点击我测试2</li>
+        </ul>
+        <div id="click-result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>测试4：跳转到真实版本</h3>
+        <button onclick="location.href='index-real.html?v='+Date.now()">打开真实版本（带时间戳）</button>
+    </div>
+    
+    <div id="log"></div>
+
+    <!-- 高德地图API -->
+    <script src="https://webapi.amap.com/maps?v=2.0&key=6fc614d0454e138a426ed6735b5989c8"></script>
+    
+    <script>
+        function log(msg, isError) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            const color = isError ? 'color:#ff6b6b' : 'color:#4ecdc4';
+            logDiv.innerHTML += `<div style="${color}">[${time}] ${msg}</div>`;
+        }
+        
+        function testAMap() {
+            const result = document.getElementById('amap-result');
+            if (typeof AMap === 'undefined') {
+                result.innerHTML = '<span class="error">❌ 高德地图API未加载</span>';
+                log('AMap API 未加载', true);
+            } else {
+                result.innerHTML = '<span class="success">✅ 高德地图API已加载</span>';
+                log('AMap API 加载成功');
+                
+                // 尝试创建地图
+                try {
+                    const map = new AMap.Map('amap-result', {
+                        zoom: 11,
+                        center: [121.4737, 31.2304]
+                    });
+                    log('地图创建成功');
+                } catch(e) {
+                    log('地图创建失败: ' + e.message, true);
+                }
+            }
+        }
+        
+        function testElements() {
+            const result = document.getElementById('element-result');
+            const elements = ['street-list', 'landmark-list', 'info-panel', 'loading'];
+            let html = '';
+            
+            elements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    html += `<div class="success">✅ ${id} 存在</div>`;
+                    log(`${id} 元素存在`);
+                } else {
+                    html += `<div class="error">❌ ${id} 不存在</div>`;
+                    log(`${id} 元素不存在`, true);
+                }
+            });
+            
+            result.innerHTML = html;
+        }
+        
+        function testClick() {
+            const result = document.getElementById('click-result');
+            const list = document.getElementById('test-list');
+            
+            list.querySelectorAll('li').forEach(li => {
+                li.addEventListener('click', function() {
+                    const msg = '点击了: ' + this.dataset.name;
+                    result.innerHTML += `<div class="success">${msg}</div>`;
+                    log(msg);
+                });
+            });
+            
+            result.innerHTML = '<div>请点击上面的列表项测试</div>';
+            log('点击事件已绑定');
+        }
+        
+        // 自动测试
+        window.onload = function() {
+            log('页面加载完成');
+            setTimeout(testAMap, 1000);
+            setTimeout(testElements, 1500);
+        };
+    </script>
+</body>
+</html>
